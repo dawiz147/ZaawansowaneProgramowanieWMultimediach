@@ -9,15 +9,11 @@
 * Lab 04 - Nauka grafiki 2D. Gra kółko krzyżyk rysowana w oknie.
 * Lab 05 - Wykorzystanie dzwięku w aplikacji.
 ### Zadania domowe:
-[X] ZadDom1:
+* ZadDom1: (zrobione)
 Napisanie prostej gry w której komputer zgaduje jaka liczbę wybrał użytkownik(przedział 0-40)(MessageBox).
-[X] ZadDom2: 
+* ZadDom2: (zrobione)
 Napisanie gry w której to użytkownik znajduje liczbę wylosowaną przez komputer. Liczba wpisywana jest w pole tekstowe i sprawdzana jest po wcisnięciu przycisku. Informacja zwrotna o tym czy liczba jest za duża jest wyświetlana jako tekst przycisku.
-[ ] ZadDom3: 
+* ZadDom3: (do zrobienia)
 Napisanie aplikacji lupki. Po najechaniu na bitmapę ma pojawiać się drugie okno które będzie przybliżeniem pewnego obszaru znajdującego sie przy kursorze.
-[ ] ZadDom4:
+* ZadDom4: (połowa zrobiona)
 Dokończenie tworzenia gry(warunek wygranej lub remisu, liczenie punktów):
-[x] Warunek wygranej
-[ ] warunek remisu
-[ ] liczenie punktów
-[x] przycisk resetujący
