@@ -12,7 +12,7 @@
 * ZadDom1: (zrobione)
 Napisanie prostej gry w której komputer zgaduje jaka liczbę wybrał użytkownik(przedział 0-40)(MessageBox).
 * ZadDom2: (zrobione)
-<p>Napisanie gry w której to użytkownik znajduje liczbę wylosowaną przez komputer. Liczba wpisywana jest w pole tekstowe i sprawdzana jest po wcisnięciu przycisku. Informacja zwrotna o tym czy liczba jest za duża jest wyświetlana jako tekst przycisku.
+Napisanie gry w której to użytkownik znajduje liczbę wylosowaną przez komputer. Liczba wpisywana jest w pole tekstowe i sprawdzana jest po wcisnięciu przycisku. Informacja zwrotna o tym czy liczba jest za duża jest wyświetlana jako tekst przycisku.
 * ZadDom3: (do zrobienia)
 Napisanie aplikacji lupki. Po najechaniu na bitmapę ma pojawiać się drugie okno które będzie przybliżeniem pewnego obszaru znajdującego sie przy kursorze.</p>
 * ZadDom4: (połowa zrobiona)
