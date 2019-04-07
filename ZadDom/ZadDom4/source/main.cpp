@@ -16,6 +16,9 @@ HWND hwndMainWindow;
 int iSprawdzenie = 0;
 int iPunktyO ;
 int iPunktyX ;
+bool bKoniecGry; 
+bool bBlokada;
+
 void drawO(HDC hDC, int x, int y) {
   int cx = x + fieldDx / 2;
   int cy = y + fieldDy / 2;
@@ -25,6 +28,7 @@ void drawO(HDC hDC, int x, int y) {
         LineTo(hDC, cx + r * cos(alpha*3.141592/180), cy + r * sin(alpha*3.141592 / 180));
     }
 }
+
 void drawX(HDC hDC, int x, int y) {
   MoveToEx(hDC,x + innerMargin,y+innerMargin,NULL);
   LineTo(hDC, x + fieldDx - innerMargin, y + fieldDy - innerMargin);
@@ -44,7 +48,8 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
     break;
   case WM_PAINT:
   {
-
+    HWND hWndst = GetDlgItem(hwndDlg, IDC_STATIC1);
+    HWND hWndst2 = GetDlgItem(hwndDlg, IDC_STATIC2);
     HDC hDC = GetDC(hwndDlg);// rysowanie szachownicy
     MoveToEx(hDC, marginX, marginY + fieldDy, NULL);
     LineTo(hDC, marginX+fieldDx*3 , marginY + fieldDy);
@@ -61,16 +66,34 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
         if (aaiBoard[i][j] == 1)drawO(hDC, marginX + i * fieldDx, marginY + j * fieldDy);
       }
     }
-    if (iSprawdzenie != 0) {
-      if (iSprawdzenie == 2) {
+    
 
+    if (iSprawdzenie != 0) {
+      if (iSprawdzenie == 2 && bKoniecGry == true) {
+        bKoniecGry = false;
+        bBlokada = true;
         TextOut(hDC, 0, 0, TEXT("WYGRAŁ GRACZ X"), 20);
+        iPunktyX++;
+        CString sMessage2 = TEXT("");
+        sMessage2.Format(TEXT("Punkty X: %d"), iPunktyX);
+        SetWindowText(hWndst2, _T(sMessage2));
+        UpdateWindow(hwndDlg);
+        
       }
-      else {
-        CString sMessage = TEXT("");
+      else if (iSprawdzenie == 1 && bKoniecGry==true) {
+        bKoniecGry = false;
+        bBlokada = true;
         TextOut(hDC, 0, 0, TEXT("WYGRAŁ GRACZ O"), 20);
+        iPunktyO++;
+        CString sMessage = TEXT("");
+        sMessage.Format(TEXT("Punkty O: %d"), iPunktyO);
+        SetWindowText(hWndst, _T(sMessage));
+        UpdateWindow(hwndDlg);
+        bKoniecGry = false;
       }
+     
     }
+   
     
 
     
@@ -95,7 +118,10 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
           }
         }
         iSprawdzenie = 0;
+        iLiczbaTur = 0;
         InvalidateRect(hwndDlg, NULL, TRUE);
+        bBlokada = false;
+        UpdateWindow(hwndDlg);
 
        
 
@@ -105,42 +131,44 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
     return FALSE;
   case WM_LBUTTONDOWN:
   {
-      HWND hWndst = GetDlgItem(hwndDlg, IDC_STATIC1);
-      HWND hWndst2 = GetDlgItem(hwndDlg, IDC_STATIC2);
-      CString sMessage = TEXT("");
-      int x = LOWORD(IParam);
-      int y = HIWORD(IParam);
-      int i = (x - marginX) / fieldDx;
-      int j = (y - marginY) / fieldDy;
-      if (aaiBoard[i][j] == 0) aaiBoard[i][j] = iCurrentPlayer;
-        if (iCurrentPlayer == 1)iCurrentPlayer = 2;
-        else iCurrentPlayer = 1;
-        iLiczbaTur++;
-        if (iLiczbaTur >= 5) {
-          for (int i = 0; i < 3; i++) {
-            //kolumny
-            if ((aaiBoard[i][0] == 1 && aaiBoard[i][1] == 1 && aaiBoard[i][2] == 1) || (aaiBoard[i][0] == 2 && aaiBoard[i][1] == 2 && aaiBoard[i][2] == 2)) {
-              iSprawdzenie = aaiBoard[i][0];
-            }
-            else if (((aaiBoard[0][i] == 1 && aaiBoard[1][i] == 1 && aaiBoard[2][i] == 1) || (aaiBoard[0][i] == 2 && aaiBoard[1][i] == 2 && aaiBoard[2][i] == 2))) {
-              iSprawdzenie = aaiBoard[0][i];
-            }
-            
-          }
-        if (((aaiBoard[0][0] == 1 && aaiBoard[1][1] == 1 && aaiBoard[2][2] == 1) || (aaiBoard[0][0] == 2 && aaiBoard[1][1] == 2 && aaiBoard[2][2] == 2))) {
-          iSprawdzenie = aaiBoard[0][0];
-        }
-        else if (((aaiBoard[0][2] == 1 && aaiBoard[1][1] == 1 && aaiBoard[2][0] == 1) || (aaiBoard[0][2] == 2 && aaiBoard[1][1] == 2 && aaiBoard[2][0] == 2))) {
-          iSprawdzenie = aaiBoard[1][1];
-        }
-
-
-              
-            
-          
-        
-      
+    HDC hDC = GetDC(hwndDlg);
+    if(bBlokada==false){
+   
+    int x = LOWORD(IParam);
+    int y = HIWORD(IParam);
+    int i = (x - marginX) / fieldDx;
+    int j = (y - marginY) / fieldDy;
+    if (aaiBoard[i][j] == 0) {
+      aaiBoard[i][j] = iCurrentPlayer;
+      iLiczbaTur++;
     }
+    if (iCurrentPlayer == 1)iCurrentPlayer = 2;
+    else iCurrentPlayer = 1;
+    
+    if (iLiczbaTur == 9) {
+      TextOut(hDC, 0, 0, TEXT("REMIS!"), 7);
+    }
+    if (iLiczbaTur >= 5) {
+      for (int i = 0; i < 3; i++) {
+        if ((aaiBoard[i][0] == 1 && aaiBoard[i][1] == 1 && aaiBoard[i][2] == 1) || (aaiBoard[i][0] == 2 && aaiBoard[i][1] == 2 && aaiBoard[i][2] == 2)) {
+          iSprawdzenie = aaiBoard[i][0];
+        }
+        else if (((aaiBoard[0][i] == 1 && aaiBoard[1][i] == 1 && aaiBoard[2][i] == 1) || (aaiBoard[0][i] == 2 && aaiBoard[1][i] == 2 && aaiBoard[2][i] == 2))) {
+          iSprawdzenie = aaiBoard[0][i];
+        }
+
+      }
+      if (((aaiBoard[0][0] == 1 && aaiBoard[1][1] == 1 && aaiBoard[2][2] == 1) || (aaiBoard[0][0] == 2 && aaiBoard[1][1] == 2 && aaiBoard[2][2] == 2))) {
+        iSprawdzenie = aaiBoard[0][0];
+      }
+      else if (((aaiBoard[0][2] == 1 && aaiBoard[1][1] == 1 && aaiBoard[2][0] == 1) || (aaiBoard[0][2] == 2 && aaiBoard[1][1] == 2 && aaiBoard[2][0] == 2))) {
+        iSprawdzenie = aaiBoard[1][1];
+      }
+    }
+    
+
+    bKoniecGry = true;
+  }
     
     return TRUE;
   }
@@ -154,8 +182,12 @@ return FALSE;
 }
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
+  bBlokada = false;
+  bKoniecGry = false;
   iPunktyO = 0;
   iPunktyX = 0;
+  iSprawdzanie = 0;
+  iLiczbaTur = 0;
   for (int i = 0; i < 3; i++){
     for (int j = 0; j < 3; j++) {
       aaiBoard[i][j]=0;
