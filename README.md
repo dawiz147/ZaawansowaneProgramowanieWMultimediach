@@ -15,5 +15,5 @@ Napisanie prostej gry w której komputer zgaduje jaka liczbę wybrał użytkowni
 Napisanie gry w której to użytkownik znajduje liczbę wylosowaną przez komputer. Liczba wpisywana jest w pole tekstowe i sprawdzana jest po wcisnięciu przycisku. Informacja zwrotna o tym czy liczba jest za duża jest wyświetlana jako tekst przycisku.
 * ZadDom3: (do zrobienia)
 Napisanie aplikacji lupki. Po najechaniu na bitmapę ma pojawiać się drugie okno które będzie przybliżeniem pewnego obszaru znajdującego sie przy kursorze.</p>
-* ZadDom4: (połowa zrobiona)[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/ZadDom/ZadDom4)
+* ZadDom4: (zrobione!)[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/ZadDom/ZadDom4)
 Dokończenie tworzenia gry(warunek wygranej lub remisu, liczenie punktów):
