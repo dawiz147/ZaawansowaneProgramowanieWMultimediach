@@ -3,7 +3,6 @@
 // U¿ywany przez: Res.rc
 //
 #define IDD_MAINVIEW                    101
-#define IDB_BITMAP1                     102
 #define IDC_BUTTON1                     1001
 #define IDC_EDIT1                       1002
 #define IDC_STATIC2                     1004

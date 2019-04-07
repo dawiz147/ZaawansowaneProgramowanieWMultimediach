@@ -72,7 +72,7 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
       if (iSprawdzenie == 2 && bKoniecGry == true) {
         bKoniecGry = false;
         bBlokada = true;
-        TextOut(hDC, 0, 0, TEXT("WYGRAŁ GRACZ X"), 20);
+        TextOut(hDC, 0, 0, TEXT("WYGRAŁ GRACZ X"), 15);
         iPunktyX++;
         CString sMessage2 = TEXT("");
         sMessage2.Format(TEXT("Punkty X: %d"), iPunktyX);
@@ -83,7 +83,7 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
       else if (iSprawdzenie == 1 && bKoniecGry==true) {
         bKoniecGry = false;
         bBlokada = true;
-        TextOut(hDC, 0, 0, TEXT("WYGRAŁ GRACZ O"), 20);
+        TextOut(hDC, 0, 0, TEXT("WYGRAŁ GRACZ O"), 15);
         iPunktyO++;
         CString sMessage = TEXT("");
         sMessage.Format(TEXT("Punkty O: %d"), iPunktyO);
