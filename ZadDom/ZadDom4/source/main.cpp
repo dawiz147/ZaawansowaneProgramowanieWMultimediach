@@ -45,9 +45,10 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
   {
   case WM_CREATE:
     UpdateWindow(hwndDlg);
-    break;
+    return TRUE;
   case WM_PAINT:
   {
+
     HWND hWndst = GetDlgItem(hwndDlg, IDC_STATIC1);
     HWND hWndst2 = GetDlgItem(hwndDlg, IDC_STATIC2);
     HDC hDC = GetDC(hwndDlg);// rysowanie szachownicy
@@ -60,6 +61,7 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
     LineTo(hDC, marginX + fieldDx, marginY + 3*fieldDy);
     MoveToEx(hDC, marginX+fieldDx*2, marginY, NULL);
     LineTo(hDC, marginX + fieldDx * 2, marginY + 3 * fieldDy);
+
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 3; j++) {
         if (aaiBoard[i][j] == 2)drawX(hDC, marginX + i * fieldDx, marginY + j * fieldDy);
@@ -107,7 +109,7 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
     switch (HIWORD(wParam))
     {
     
-    case BN_CLICKED://zdarzenie klikniecia na UI
+    case BN_CLICKED:
       switch (LOWORD(wParam))
       {
       case IDC_BUTTON1:
@@ -133,7 +135,7 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
   {
     HDC hDC = GetDC(hwndDlg);
     if(bBlokada==false){
-   
+    UpdateWindow(hwndDlg);
     int x = LOWORD(IParam);
     int y = HIWORD(IParam);
     int i = (x - marginX) / fieldDx;
