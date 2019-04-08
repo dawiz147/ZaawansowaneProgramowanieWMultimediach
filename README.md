@@ -8,6 +8,7 @@
 * Lab 03 - Nauka obsługi wyświetlania bitmap i wgrywania obrazów z komputera jako tło okna.[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Zajęcia/Lab%2003)
 * Lab 04 - Nauka grafiki 2D. Gra kółko krzyżyk rysowana w oknie.[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Zajęcia/Lab%2004)
 * Lab 05 - Wykorzystanie dzwięku w aplikacji.[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Zajęcia/Lab%2005)
+* Lab06 - Wykorzystanie OpenGL.
 ### Zadania domowe:
 * ZadDom1: (zrobione) [link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/ZadDom/ZadDom1)
 Napisanie prostej gry w której komputer zgaduje jaka liczbę wybrał użytkownik(przedział 0-40)(MessageBox).
