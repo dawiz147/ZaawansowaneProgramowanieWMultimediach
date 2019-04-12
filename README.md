@@ -18,4 +18,6 @@ Napisanie gry w której to użytkownik znajduje liczbę wylosowaną przez komput
 * ZadDom3: (do zrobienia)
 Napisanie aplikacji lupki. Po najechaniu na bitmapę ma pojawiać się drugie okno które będzie przybliżeniem pewnego obszaru znajdującego sie przy kursorze.</p>
 * ZadDom4: (zrobione!)[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/ZadDom/ZadDom4)
-Dokończenie tworzenia gry(warunek wygranej lub remisu, liczenie punktów):
+Dokończenie tworzenia gry(warunek wygranej lub remisu, liczenie punktów).
+* ZadDom5: (Do zrobienia)[link]()
+Stworzenie armii 50 ludzików maszerujących obok siebie składających sie z sześcianów.
