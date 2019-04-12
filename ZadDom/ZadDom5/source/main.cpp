@@ -3,6 +3,7 @@
 #include "Res.h"
 #include <gl\GL.h> // OpenGL32
 #include <gl\GLU.h> // GLu32
+//#include <cmath>
 //#include <gl\glaux.h> //Header File For The Glaux
 
 //biblioteki
@@ -12,6 +13,10 @@
 HWND hwndMainWindow;
 static float kat;
 float Scale;
+bool Move;
+float MoveHumanRight;
+float MoveHumanLeft;
+float minsi;
 
 void DrawCube(float x, float y,float z,float dx,float dy, float dz)
 {
@@ -19,52 +24,88 @@ void DrawCube(float x, float y,float z,float dx,float dy, float dz)
   glTranslatef(x, y, z); // zmiana po³o¿enia "œwiata"
   glScalef(dx, dy, dz); // przeskalowanie "œwiata"
   glBegin(GL_QUADS);
-  glColor3f(1, 0, 0);
-  glVertex3f(0, 0, 0);
-  glVertex3f(0, 1, 0);
-  glVertex3f(1, 1, 0);
-  glVertex3f(1, 0, 0);
+ 
+   
+    
+    glColor3f(1, 0, 0);
+    glVertex3f(0, 0, 0);
+    glVertex3f(0, 1, 0);
+    glVertex3f(1, 1, 0);
+    glVertex3f(1, 0, 0);
 
-  glColor3f(1, 1, 0);
-  glVertex3f(0, 0, 1);
-  glVertex3f(0, 1, 1);
-  glVertex3f(1, 1, 1);
-  glVertex3f(1, 0, 1);
+    glColor3f(1, 1, 0);
+    glVertex3f(0, 0, 1);
+    glVertex3f(0, 1, 1);
+    glVertex3f(1, 1, 1);
+    glVertex3f(1, 0, 1);
 
-  glColor3f(1, 0, 1);
-  glVertex3f(0, 1, 1);
-  glVertex3f(0, 1, 0);
-  glVertex3f(1, 1, 0);
-  glVertex3f(1, 1, 1);
+    glColor3f(1, 0, 1);
+    glVertex3f(0, 1, 1);
+    glVertex3f(0, 1, 0);
+    glVertex3f(1, 1, 0);
+    glVertex3f(1, 1, 1);
 
-  glColor3f(1, 0, 1);
-  glVertex3f(1, 1, 1);
-  glVertex3f(1, 1, 0);
-  glVertex3f(1, 0, 0);
-  glVertex3f(1, 0, 1);
+    glColor3f(1, 0, 1);
+    glVertex3f(1, 1, 1);
+    glVertex3f(1, 1, 0);
+    glVertex3f(1, 0, 0);
+    glVertex3f(1, 0, 1);
 
-  glColor3f(0, 0, 1);
-  glVertex3f(0, 0, 0);
-  glVertex3f(1, 0, 0);
-  glVertex3f(1, 0, 1);
-  glVertex3f(0, 0, 1);
+    glColor3f(0, 0, 1);
+    glVertex3f(0, 0, 0);
+    glVertex3f(1, 0, 0);
+    glVertex3f(1, 0, 1);
+    glVertex3f(0, 0, 1);
 
-  glColor3f(0, 1, 1);
-  glVertex3f(0, 0, 0);
-  glVertex3f(0, 1, 0);
-  glVertex3f(0, 1, 1);
-  glVertex3f(0, 0, 1);
-
-
+    glColor3f(0, 1, 1);
+    glVertex3f(0, 0, 0);
+    glVertex3f(0, 1, 0);
+    glVertex3f(0, 1, 1);
+    glVertex3f(0, 0, 1);
+ 
   glEnd();
   glPopMatrix(); // wczytanie podstawowych ustawieñ 
 
 }
-void DrawHuman() {
-  Scale = 1.0f;   // Skalowanie rozmiaru ludzika
-  DrawCube(0*Scale, 1.5f*Scale, 0*Scale, 1*Scale, 1*Scale,1*Scale); // g³owa
-  DrawCube(0.25f * Scale, 1.25f*Scale, 0.25f * Scale, 0.5f * Scale, 0.25f * Scale, 0.5f * Scale); // Szyja
+void DrawHuman(float x, float y, float z, float dx, float dy, float dz) {
+  //Move = false;
+  glPushMatrix();
+  glTranslatef(x, y, z); // zmiana po³o¿enia "œwiata"
+  glScalef(dx, dy, dz); // przeskalowanie "œwiata"
+  DrawCube(0.5f, 1.5f, 0, 1, 1,1); // g³owa
+  DrawCube(0.75f , 1.25f, 0.25f , 0.5f , 0.25f , 0.5f ); // Szyja
+  DrawCube(0.0f , -1.0f, -0.25f , 2.0f , 2.25f , 1.5f ); // tu³ów
+   
+  
+    
+  
+    MoveHumanRight += 0.01f;
+    //MoveHumanLeft += 0.1f;
+    glPushMatrix();
+    glRotatef(15*sin(MoveHumanRight*0.1f + 1.570796), 1, 0, 0);
+     DrawCube(2.0f , -1.25f, 0.125f , 0.5f , 2.25f , 0.75f ); // prawa rêka
+    DrawCube(0.125f , -3.15f, 0.125f , 1.0f , 2.25f , 0.90f ); // lewa noga
+    glPopMatrix();
 
+
+    glPushMatrix();
+    glRotatef(15 * sin(MoveHumanRight*0.1f + 4.712388), 1, 0, 0);
+    DrawCube(-0.5f , -1.25f, 0.125f , 0.5f , 2.25f , 0.75f ); // lewa rêka
+    DrawCube(1.25f , -3.15f, 0.125f , 1.0f , 2.25f , 0.90f ); // prawa noga
+    glPopMatrix();
+    glEnd();
+    glPopMatrix();
+  
+}
+void DrawArmy()
+{
+  DrawHuman(0,0,0,1,1,1);
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 5; j++) {
+      DrawHuman(3 * i, 0, 3*j, 1, 1, 1);
+
+    }
+  }
 }
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)
 {
@@ -84,13 +125,14 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)
 
 int DrawGLScene(GLvoid)
 {
+  glMatrixMode(GL_MODELVIEW);
   glEnable(GL_DEPTH_TEST);
   kat+=0.01f;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   glTranslatef(0, 0, -10);
   
-    glRotatef(kat, 10, 10, 0);
+    glRotatef(kat, 1, 1, 0);
   
   glBegin(GL_LINES);
   glColor3d(1, 0, 0);
@@ -106,7 +148,7 @@ int DrawGLScene(GLvoid)
   glVertex3d(0, 0, -10);
   glEnd();
   
-  DrawHuman();
+  DrawArmy();
   return 1;
 }
 
@@ -164,6 +206,7 @@ return FALSE;
 }
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
+  MoveHumanRight = 0;
   kat = 50;
   hwndMainWindow = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_MAINVIEW), NULL, DialogProc);
   static PIXELFORMATDESCRIPTOR pfd =//struktura formatu pixeli
