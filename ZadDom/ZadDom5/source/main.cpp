@@ -65,6 +65,7 @@ void DrawHuman() {
   DrawCube(0.5f*Scale, 1.5f*Scale, 0*Scale, 1*Scale, 1*Scale,1*Scale); // g³owa
   DrawCube(0.75f * Scale, 1.25f*Scale, 0.25f * Scale, 0.5f * Scale, 0.25f * Scale, 0.5f * Scale); // Szyja
   DrawCube(0.0f * Scale, -1.0f*Scale, -0.25f * Scale, 2.0f * Scale, 2.25f * Scale, 1.5f * Scale); // tu³ów
+  DrawCube(2.0f * Scale, -1.25f*Scale, 0.125f * Scale, 0.5f * Scale, 2.25f * Scale, 0.75f * Scale); // prawa rêka
 
 }
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)
