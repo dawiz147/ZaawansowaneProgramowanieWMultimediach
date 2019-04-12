@@ -11,6 +11,7 @@
 //#pragma comment(lib, "glaux.lib")
 HWND hwndMainWindow;
 static float kat;
+float Scale;
 
 void DrawCube(float x, float y,float z,float dx,float dy, float dz)
 {
@@ -59,7 +60,12 @@ void DrawCube(float x, float y,float z,float dx,float dy, float dz)
   glPopMatrix(); // wczytanie podstawowych ustawieñ 
 
 }
+void DrawHuman() {
+  Scale = 1.0f;   // Skalowanie rozmiaru ludzika
+  DrawCube(0*Scale, 1.5f*Scale, 0*Scale, 1*Scale, 1*Scale,1*Scale); // g³owa
+  DrawCube(0.25f * Scale, 1.25f*Scale, 0.25f * Scale, 0.5f * Scale, 0.25f * Scale, 0.5f * Scale); // Szyja
 
+}
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)
 {
   if (height == 0)
@@ -99,8 +105,8 @@ int DrawGLScene(GLvoid)
   glVertex3d(0, 0, 10);
   glVertex3d(0, 0, -10);
   glEnd();
-  DrawCube(0,0,0,1,1,1);
-
+  
+  DrawHuman();
   return 1;
 }
 
