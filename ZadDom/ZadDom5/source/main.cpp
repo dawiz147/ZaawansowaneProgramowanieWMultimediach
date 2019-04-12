@@ -62,8 +62,9 @@ void DrawCube(float x, float y,float z,float dx,float dy, float dz)
 }
 void DrawHuman() {
   Scale = 1.0f;   // Skalowanie rozmiaru ludzika
-  DrawCube(0*Scale, 1.5f*Scale, 0*Scale, 1*Scale, 1*Scale,1*Scale); // g³owa
-  DrawCube(0.25f * Scale, 1.25f*Scale, 0.25f * Scale, 0.5f * Scale, 0.25f * Scale, 0.5f * Scale); // Szyja
+  DrawCube(0.5f*Scale, 1.5f*Scale, 0*Scale, 1*Scale, 1*Scale,1*Scale); // g³owa
+  DrawCube(0.75f * Scale, 1.25f*Scale, 0.25f * Scale, 0.5f * Scale, 0.25f * Scale, 0.5f * Scale); // Szyja
+  DrawCube(0.0f * Scale, -1.0f*Scale, -0.25f * Scale, 2.0f * Scale, 2.25f * Scale, 1.5f * Scale); // tu³ów
 
 }
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)
