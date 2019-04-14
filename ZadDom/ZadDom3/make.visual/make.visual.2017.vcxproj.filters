@@ -33,5 +33,8 @@
     <Image Include="..\source\bitmap1.bmp">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="..\source\bitmap2.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>
