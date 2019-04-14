@@ -15,9 +15,11 @@
 Napisanie prostej gry w której komputer zgaduje jaka liczbę wybrał użytkownik(przedział 0-40)(MessageBox).
 * ZadDom2: (zrobione)[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/ZadDom/ZadDom2)
 Napisanie gry w której to użytkownik znajduje liczbę wylosowaną przez komputer. Liczba wpisywana jest w pole tekstowe i sprawdzana jest po wcisnięciu przycisku. Informacja zwrotna o tym czy liczba jest za duża jest wyświetlana jako tekst przycisku.
-* ZadDom3: (do zrobienia)
-Napisanie aplikacji lupki. Po najechaniu na bitmapę ma pojawiać się drugie okno które będzie przybliżeniem pewnego obszaru znajdującego sie przy kursorze.</p>
+* ZadDom3: (Brak powiekszania)
+Napisanie aplikacji lupki. Po kliknięciu na bitmapę ma powiekszyć fragment obszaru bitmapy.[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/ZadDom/ZadDom3)
 * ZadDom4: (zrobione!)[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/ZadDom/ZadDom4)
 Dokończenie tworzenia gry(warunek wygranej lub remisu, liczenie punktów).
 * ZadDom5: (Do zrobienia)[link]()
 Stworzenie armii 50 ludzików maszerujących obok siebie składających sie z sześcianów.
+### Projekt:
+#### Temat: Sokoban 3D
