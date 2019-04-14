@@ -43,7 +43,6 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
      
       BitBlt(hDC, 0, 0, 100, 100, hDCBitmap, XMousePos, YMousePos, SRCCOPY);
 
-      // RectangleF rect = new RectangleF(150, 200, 25, 25);
       DeleteDC(hDCBitmap);
       DeleteObject(hBitmap);
       ReleaseDC(hwndDlg, hDC);// zwolnienie kontekstu urzadzenia
@@ -54,15 +53,13 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
      
       case WM_LBUTTONDOWN:
       {
-        TextOut(hDC, 0, 0, TEXT("Text output to client area"), 100);
+        
         int x = LOWORD(IParam);
         int y = HIWORD(IParam);
         XMousePos = x;
         YMousePos = y;
         draw = true;
-       // BitBlt(hDC, 0, 0, 100, 100, hDCBitmap, XMousePos, YMousePos, SRCCOPY);
-        //InvalidateRect(hwndDlg, NULL, TRUE);
-       // UpdateWindow(hwndDlg);
+    
 
         return true;
        
