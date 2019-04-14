@@ -23,7 +23,6 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
     BitBlt(hDC, 0, 0, 900, 400, hDCBitmap, 0, 0, SRCCOPY);
     DeleteDC(hDCBitmap);
     DeleteObject(hBitmap);
-    TextOut(hDC,0,0,TEXT("Text wyœwietlany TextOut"), 27);//dlugosc tekstu wyswietlanego !
     ReleaseDC(hwndDlg, hDC);// zwolnienie kontekstu urzadzenia
     break;
 
