@@ -11,12 +11,9 @@
 #pragma comment(lib, "glu32.lib")
 //#pragma comment(lib, "glaux.lib")
 HWND hwndMainWindow;
-static float kat;
-float Scale;
-bool Move;
-float MoveHumanRight;
-float MoveHumanLeft;
-float minsi;
+static float Obrot;
+float RuchCzlowieka;
+
 
 void DrawCube(float x, float y,float z,float dx,float dy, float dz)
 {
@@ -68,7 +65,7 @@ void DrawCube(float x, float y,float z,float dx,float dy, float dz)
 
 }
 void DrawHuman(float x, float y, float z, float dx, float dy, float dz) {
-  //Move = false;
+  
   glPushMatrix();
   glTranslatef(x, y, z); // zmiana po³o¿enia "œwiata"
   glScalef(dx, dy, dz); // przeskalowanie "œwiata"
@@ -79,17 +76,16 @@ void DrawHuman(float x, float y, float z, float dx, float dy, float dz) {
   
     
   
-    MoveHumanRight += 0.01f;
-    //MoveHumanLeft += 0.1f;
+    RuchCzlowieka += 0.01f;
     glPushMatrix();
-    glRotatef(15*sin(MoveHumanRight*0.1f + 1.570796), 1, 0, 0);
+    glRotatef(15*sin(RuchCzlowieka*0.1f + 1.570796), 1, 0, 0);
      DrawCube(2.0f , -1.25f, 0.125f , 0.5f , 2.25f , 0.75f ); // prawa rêka
     DrawCube(0.125f , -3.15f, 0.125f , 1.0f , 2.25f , 0.90f ); // lewa noga
     glPopMatrix();
 
 
     glPushMatrix();
-    glRotatef(15 * sin(MoveHumanRight*0.1f + 4.712388), 1, 0, 0);
+    glRotatef(15 * sin(RuchCzlowieka*0.1f + 4.712388), 1, 0, 0);
     DrawCube(-0.5f , -1.25f, 0.125f , 0.5f , 2.25f , 0.75f ); // lewa rêka
     DrawCube(1.25f , -3.15f, 0.125f , 1.0f , 2.25f , 0.90f ); // prawa noga
     glPopMatrix();
@@ -127,12 +123,12 @@ int DrawGLScene(GLvoid)
 {
   glMatrixMode(GL_MODELVIEW);
   glEnable(GL_DEPTH_TEST);
-  kat+=0.01f;
+  Obrot+=0.01f;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   glTranslatef(0, 0, -10);
   
-    glRotatef(kat, 0, 1, 0);
+    glRotatef(Obrot, 0, 1, 0);
   
   glBegin(GL_LINES);
   glColor3d(1, 0, 0);
@@ -206,8 +202,8 @@ return FALSE;
 }
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
-  MoveHumanRight = 0;
-  kat = 50;
+  RuchCzlowieka = 0;
+  Obrot = 50;
   hwndMainWindow = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_MAINVIEW), NULL, DialogProc);
   static PIXELFORMATDESCRIPTOR pfd =//struktura formatu pixeli
   {
@@ -271,15 +267,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   if (hwndMainWindow && !DestroyWindow(hwndMainWindow)) { hwndMainWindow = NULL; }//wyzerowanie uchwytu okienka
 
 
-
-
-
-
-
-  //sMessage.Format(TEXT("Wybierz liczbe z zakresu od 1 do 40. Czy ta liczba jest wiêksza od %d ?"), SrodekPrzedzialu);
-
-  //int iRetKey = MessageBox(0, sMessage ,"GRA", MB_YESNO);
-    //sz- ciag znakow       hwnd -uchwyt       u-unignet int      a - wektor
   return 0;
-  //gra odwrotna komputer wybiera liczbe a my zgadujemy wpisuj¹c wartoœæ w okienko !
+ 
 }
