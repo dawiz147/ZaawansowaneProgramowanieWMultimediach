@@ -10,6 +10,7 @@
 * Lab 05 - Wykorzystanie dzwięku w aplikacji.[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Zajęcia/Lab%2005)
 * Lab 06 - Wykorzystanie OpenGL.[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Zajęcia/Lab%2006)
 * Lab 07 - Rysowanie figur przestrzennych z użyciem OpenGL. [link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Zajęcia/Lab%2007)
+* Lab 08 - Użycie klawiatury w openGL. [link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Zajęcia/Lab%2007)
 ### Zadania domowe:
 * ZadDom1: (zrobione) [link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/ZadDom/ZadDom1)
 Napisanie prostej gry w której komputer zgaduje jaka liczbę wybrał użytkownik(przedział 0-40)(MessageBox).
