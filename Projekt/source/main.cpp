@@ -3,6 +3,7 @@
 #include "Res.h"
 #include <gl\GL.h> // OpenGL32
 #include <gl\GLU.h> // GLu32
+
 //#include <cmath>
 //#include <gl\glaux.h> //Header File For The Glaux
 
@@ -11,31 +12,28 @@
 #pragma comment(lib, "glu32.lib")
 //#pragma comment(lib, "glaux.lib")
 HWND hwndMainWindow;
-static float Obrot;
-float RuchCzlowieka;
-GLfloat fKameraPositionX=0.0f;
-GLfloat fKameraPositionY=0.0f;
-GLfloat fKameraPositionZ=-10.0f;
 bool bKey[6] = { false };
 HDC hDC;
-float HeightMap[7*7] =
-{ 0.5f,0.5f,0.5f,0.5f,0.5f,0.5f,0.5f,
-  0.5f, 0, 0, 0, 0, 0, 0.5f,
-  0.5f, 0, 0, 0, 0, 0, 0.5f,
-  0.5f, 0, 0, 0, 0, 0, 0.5f,
-  0.5f, 0, 0, 0, 0, 0, 0.5f,
-  0.5f, 0, 0, 0, 0, 0, 0.5f,
-  0.5f, 0.5f,0.5f,0.5f,0.5f,0.5f,0.5f,
-}; // TAB 2D
-/*Mo¿na te¿ tak :
- * float HeightMap[5][5] =
-{{ 1,1,1,1,1,}
- { 1.5f, 1.15f, 1.25f, 1.115f, 1.85f,}
-  {0.5f, 0.15f, 0.25f, 0.115f, 0.85f,}
-  {0,0,0,0,0,}
-  0.35f, 0.35f, 0.65f, 0.17f, 0.67f,
-}; // TAB 2D
- */
+float PlayerPositionX;
+float PlayerPositionY;
+float LevelOne[12][12] =
+{
+  {1,1,1,1,1,1,1,1,1,1,1,1},
+  {1,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,1,0,1},
+  {1,0.5,0,0,0,0,0,0,0,0,1,1},
+  {1,1,1,1,1,1,1,1,1,1,1,1},
+
+
+};
+
 
 void DrawCube(float x, float y,float z,float dx,float dy, float dz)
 {
@@ -87,20 +85,27 @@ void DrawCube(float x, float y,float z,float dx,float dy, float dz)
   glPopMatrix(); // wczytanie podstawowych ustawieñ 
 
 }
-void DrawHeightMap() // funkcja rysujaca HeighMape
+void CreateLevel() // funkcja rysujaca HeighMape
 {
-  for (int i = 0; i < 7; i++)
-  {
-    for (int j = 0; j < 7; j++)
+    for (int i = 0; i < 12; i++)
     {
-      glPushMatrix();
-      //glRotatef(90, 1, 0, 0);
-      DrawCube(j, i, 0, 1, 1, HeightMap[i * 7 + j]);
-      
-      glPopMatrix();
+      for (int j = 0; j < 12; j++)
+      {
+        if (LevelOne[i][j] == 1 || LevelOne[i][j] == 0) {
+          glPushMatrix();
+          glTranslatef(0, 0, 0);
+          DrawCube(j*0.5f, i*0.5f, -1, 0.5f, 0.5f, LevelOne[i][j]);
+          glPopMatrix();
+        }
+        else if(LevelOne[i][j]==0.5f)
+        {
+          PlayerPositionY = i;
+          PlayerPositionX = j;
+          LevelOne[i][j] = 0;
+        }
+       
     }
   }
-
 }
 
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)
@@ -123,36 +128,54 @@ int DrawGLScene(GLvoid)
 {
   glMatrixMode(GL_MODELVIEW);
   glEnable(GL_DEPTH_TEST);
-  Obrot+=0.01f;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
+  //glPushMatrix();
+  
+
+  //glRotatef(180, 0, 1, 0);
+  glTranslatef(-3, -3, -7.0f); // zmiana po³o¿enia "œwiata"
+//glPopMatrix();
+  
  
-  glTranslatef(-4, -4, fKameraPositionZ); // zmiana po³o¿enia "œwiata"
   
-   // glRotatef(-90, 0, 1, 0);
-  
-  glBegin(GL_LINES);
-  glColor3d(1, 0, 0);
-  glVertex3d(10, 0, 0);
-  glVertex3d(-10, 0, 0);
 
-  glColor3d(0, 1, 0);
-  glVertex3d(0, 10, 0);
-  glVertex3d(0, -10, 0);
-
-  glColor3d(0, 0, 1);
-  glVertex3d(0, 0, 10);
-  glVertex3d(0, 0, -10);
+  CreateLevel();
   glEnd();
+  if(LevelOne[(int)(PlayerPositionX-1)][(int)abs((PlayerPositionY))]==0)
+  {
+    if (bKey[1]) {
+      PlayerPositionX --;
   
-  //DrawArmy();
-  DrawHeightMap();
-  if (bKey[0]) fKameraPositionX -= 0.01f;
-  if (bKey[1]) fKameraPositionX += 0.01f;
-  if (bKey[2]) fKameraPositionY -= 0.01f;
-  if (bKey[3]) fKameraPositionY += 0.01f;
-  DrawCube(5 - fKameraPositionX, 1 - fKameraPositionY, 0, 1, 1, 0.5f);
+    }
+  }
+  if (LevelOne[(int)(PlayerPositionX+1) ][(int)abs((PlayerPositionY))] == 0)
+  {
+    if (bKey[0]) {
+      PlayerPositionX ++;
+
+    }
+ }
+  if (LevelOne[(int)(PlayerPositionX )][(int)(PlayerPositionY+1)] == 0)
+ {
+   if (bKey[2]) {
+     PlayerPositionY ++;
+ 
+   }
+ } if (LevelOne[(int)(PlayerPositionX)][(int)PlayerPositionY-1 ] == 0)
+ {
+   if (bKey[3]) {
+     PlayerPositionY --;
+
+   }
+ }
+  CString sMessage2 = TEXT("");
+  sMessage2.Format(TEXT("X: %d, y: %d"),(int) PlayerPositionX,(int) PlayerPositionY);
+  SetWindowText(hwndMainWindow, _T(sMessage2));
+  DrawCube(PlayerPositionX*0.5f, PlayerPositionY*0.5f, -1, 0.5f, 0.5f, 0.5f);
   return 1;
+
+
 }
 
 INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IParam)
@@ -254,8 +277,6 @@ return FALSE;
 }
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
-  RuchCzlowieka = 0;
-  Obrot = 50;
   hwndMainWindow = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_MAINVIEW), NULL, DialogProc);
   static PIXELFORMATDESCRIPTOR pfd =//struktura formatu pixeli
   {
@@ -290,7 +311,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   ShowWindow(hwndMainWindow, SW_SHOW);
   SetForegroundWindow(hwndMainWindow);
   SetFocus(hwndMainWindow);
-  SetTimer(hwndMainWindow, 100, 10, NULL);
+  SetTimer(hwndMainWindow, 100, 250, NULL);
  
   MSG msg = {};
   BOOL done = false;
