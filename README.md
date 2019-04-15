@@ -23,7 +23,7 @@ Dokończenie tworzenia gry(warunek wygranej lub remisu, liczenie punktów).
 * ZadDom5: (zrobione)[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/ZadDom/ZadDom5)
 Stworzenie armii 50 ludzików maszerujących obok siebie składających sie z sześcianów.
 ### Projekt:
-#### Temat: Sokoban 3D
+#### Temat: Sokoban 3D 15.04.2019 Start Projektu
 [link]https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Projekt
-15.04.2019 Start Projektu
+
 
