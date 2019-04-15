@@ -1,15 +1,17 @@
-﻿#include "Listonosz2.h"
-#pragma once
+﻿
 #include <Windows.h>
 #include <atlstr.h>
-#include "Listonosz2.h"
 #include <gl\GL.h> // OpenGL32
 #include <gl\GLU.h> // GLu32
+
+#pragma once
 
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
 
-float RuchCzlowieka=0;
+#include "create_postman.h"
+
+float RuchCzlowieka = 0;
 
 void DrawCube(float x, float y, float z, float dx, float dy, float dz)
 {
@@ -60,14 +62,8 @@ void DrawCube(float x, float y, float z, float dx, float dy, float dz)
   glPopMatrix(); // wczytanie podstawowych ustawień 
 
 }
-//void MoveHuman(bool Move)
-//{
- // if(Move==true)
- // {
-    
- // }
-//}
-void DrawHuman(float x, float y, float z, float dx, float dy, float dz) {
+
+void DrawPostman(float x, float y, float z, float dx, float dy, float dz) {
 
   glPushMatrix();
   glTranslatef(x, y, z); // zmiana położenia "świata"

@@ -1,7 +1,10 @@
-#include <Windows.h>
+
+
 #include <atlstr.h>
-#include "Res.h"
-#include "Listonosz2.h"
+
+#include <Windows.h>
+#include<windef.h>
+#include <winuser.h>
 #include <gl\GL.h> // OpenGL32
 #include <gl\GLU.h> // GLu32
 //#include <cmath>
@@ -10,11 +13,17 @@
 //biblioteki
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
+#include "Res.h"
+#include "create_postman.h"
+#include "postman_movment.h"
+
 //#pragma comment(lib, "glaux.lib")
 HWND hwndMainWindow;
 static float Obrot;
 //float RuchCzlowieka;
-
+float move_up_down=0;
+float move_left_right=0;
+bool xxx = false;
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)
 {
   if (height == 0)
@@ -33,8 +42,10 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)
 
 
 
+
 int DrawGLScene(GLvoid)
 {
+  
   glMatrixMode(GL_MODELVIEW);
   glEnable(GL_DEPTH_TEST);
   Obrot+=0.01f;
@@ -57,8 +68,40 @@ int DrawGLScene(GLvoid)
   glVertex3d(0, 0, 10);
   glVertex3d(0, 0, -10);
   glEnd();
-  
-  DrawHuman(0,0,0,1,1,1);
+  //move_up_down+= CheckTheKeyboardUpDown();
+  //move_left_right += CheckTheKeyboardLeftRight();
+
+  //
+  if (GetAsyncKeyState(VK_UP)) {
+    move_up_down -= 0.001f;
+    //glPushMatrix();
+   // glRotatef(180, 0, 1, 0);
+    
+  }
+  if (GetAsyncKeyState(VK_DOWN)) {
+    move_up_down += 0.001f;
+    glPushMatrix();
+   // glTranslatef(-move_left_right, -0, -move_up_down);
+    //glRotatef(-180, move_left_right, 0, 0);
+  }
+ 
+
+
+
+  if (GetAsyncKeyState(VK_LEFT)) {
+    move_left_right -= 0.001f;
+  //  glPushMatrix();
+  //  glRotatef(180, 1, 0, 0);
+  }
+  if (GetAsyncKeyState(VK_RIGHT)) {
+    move_left_right += 0.001f;
+   // glPushMatrix();
+   // glRotatef(180, 1, 1, 1);
+  }
+  //
+  DrawPostman(move_left_right,0,move_up_down,1,1,1);
+  glPopMatrix();
+ 
   return 1;
 }
 
@@ -117,6 +160,7 @@ return FALSE;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
   //RuchCzlowieka = 0;
+  
   Obrot = 50;
   hwndMainWindow = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_MAINVIEW), NULL, DialogProc);
   static PIXELFORMATDESCRIPTOR pfd =//struktura formatu pixeli

@@ -13,11 +13,24 @@
 HWND hwndMainWindow;
 static float Obrot;
 float RuchCzlowieka;
+GLfloat fKameraPositionX=0.0f;
+GLfloat fKameraPositionY=0.0f;
+GLfloat fKameraPositionZ=-10.0f;
+bool bKey[6] = { false };
+HDC hDC;
+float HeightMap[5*5] =
+{ 1,1,1,1,1,
+  1.5f, 1.15f, 1.25f, 1.115f, 1.85f,
+  0.5f, 0.15f, 0.25f, 0.115f, 0.85f,
+  0,0,0,0,0,
+  0.35f, 0.35f, 0.65f, 0.17f, 0.67f,
+}; // TAB 2D
 
 
 void DrawCube(float x, float y,float z,float dx,float dy, float dz)
 {
   glPushMatrix();// zapisanie ustawieñ "œwiata"
+
   glTranslatef(x, y, z); // zmiana po³o¿enia "œwiata"
   glScalef(dx, dy, dz); // przeskalowanie "œwiata"
   glBegin(GL_QUADS);
@@ -62,6 +75,21 @@ void DrawCube(float x, float y,float z,float dx,float dy, float dz)
  
   glEnd();
   glPopMatrix(); // wczytanie podstawowych ustawieñ 
+
+}
+void DrawHeightMap() // funkcja rysujaca HeighMape
+{
+  for (int i = 0; i < 5; i++)
+  {
+    for (int j = 0; j < 5; j++)
+    {
+      glPushMatrix();
+      glRotatef(-90, 1, 0, 0);
+      DrawCube(j, i, 0, 1, 1, HeightMap[i * 5 + j]);
+      
+      glPopMatrix();
+    }
+  }
 
 }
 void DrawHuman(float x, float y, float z, float dx, float dy, float dz) {
@@ -126,7 +154,14 @@ int DrawGLScene(GLvoid)
   Obrot+=0.01f;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
-  glTranslatef(0, 0, -10);
+  if (bKey[0]) fKameraPositionX -= 0.01f;
+  if (bKey[1]) fKameraPositionX += 0.01f;
+  if (bKey[2]) fKameraPositionY -= 0.01f;
+  if (bKey[3]) fKameraPositionY += 0.01f;
+  if (bKey[4]) HeightMap[2 * 5 + 2] += 0.01f;
+  if (bKey[5]) HeightMap[2 * 5 + 2] -= 0.01f;
+  
+  glTranslatef(fKameraPositionX, fKameraPositionY, fKameraPositionZ); // zmiana po³o¿enia "œwiata"
   
     glRotatef(Obrot, 0, 1, 0);
   
@@ -144,7 +179,8 @@ int DrawGLScene(GLvoid)
   glVertex3d(0, 0, -10);
   glEnd();
   
-  DrawArmy();
+  //DrawArmy();
+  DrawHeightMap();
   return 1;
 }
 
@@ -159,9 +195,71 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
 
     return FALSE;
   }
+  case WM_KEYDOWN:
+  {
+    if(wParam==VK_RIGHT)
+    {
+      bKey[0] = true;
+    }
+    if (wParam == VK_LEFT)
+    {
+      bKey[1] = true;
+    }
+    if (wParam == VK_UP)
+    {
+      bKey[2] = true;
+    }
+    if (wParam == VK_DOWN)
+    {
+      bKey[3] = true;
+    }
+    if (wParam == 0x57)//w
+    {
+      bKey[4] = true;
+    }
+    if (wParam == 0x53)//s
+    {
+      bKey[5] = true;
+    }
+    return TRUE;
+  }
+  case WM_TIMER:
+    DrawGLScene();
+    SwapBuffers(hDC);
+    return TRUE;
+  case WM_KEYUP:
+  {
+    if (wParam == VK_RIGHT)
+    {
+      bKey[0] = false;
+    }
+    if (wParam == VK_LEFT)
+    {
+      bKey[1] = false;
+    }
+    if (wParam == VK_UP)
+    {
+      bKey[2] = false;
+    }
+    if (wParam == VK_DOWN)
+    {
+      bKey[3] = false;
+    }
+    if (wParam == 0x57)//w
+    {
+      bKey[4] = false;
+    }
+    if (wParam == 0x53)//s
+    {
+      bKey[5] = false;
+    }
+    return TRUE;
+  }
+
   case WM_SIZE:
   {
     ReSizeGLScene(LOWORD(IParam), HIWORD(IParam));
+
   }
     return TRUE;
   case EN_CHANGE:
@@ -224,7 +322,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     0,                            //zarezerwowane
     0, 0, 0                       // ignorowane warstwy maski
   };
-  HDC hDC = NULL;
+ // HDC hDC = NULL;
   HGLRC hRC = NULL;
   GLuint PixelFormat;
 
@@ -238,6 +336,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   ShowWindow(hwndMainWindow, SW_SHOW);
   SetForegroundWindow(hwndMainWindow);
   SetFocus(hwndMainWindow);
+  SetTimer(hwndMainWindow, 100, 50, NULL);
  
   MSG msg = {};
   BOOL done = false;
@@ -253,8 +352,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     }
     else
     {
-      DrawGLScene();
-      SwapBuffers(hDC);
+     // DrawGLScene();
+     // SwapBuffers(hDC);
     }
   }
   
