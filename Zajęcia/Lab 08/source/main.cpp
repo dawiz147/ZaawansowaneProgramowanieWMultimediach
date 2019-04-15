@@ -24,7 +24,7 @@ float HeightMap[5*5] =
   0.5f, 0.15f, 0.25f, 0.115f, 0.85f,
   0,0,0,0,0,
   0.35f, 0.35f, 0.65f, 0.17f, 0.67f,
-}; // TAB 2D
+}; // TAB 2D.
 
 
 void DrawCube(float x, float y,float z,float dx,float dy, float dz)
