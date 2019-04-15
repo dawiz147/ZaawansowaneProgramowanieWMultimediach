@@ -26,7 +26,4 @@ Stworzenie armii 50 ludzików maszerujących obok siebie składających sie z sz
 #### Temat: Sokoban 3D
 [link]https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Projekt
 15.04.2019 Start Projektu
-- Stworzenie pierwszego poziomu i dodanie ruchu postaci ( sześcian, ruch sterowany strzałkami na klawiaturze)
-<p align="center">
-  <img src="https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/blob/master/SS/Start.gif" width="300" height="300" />
-</p>
+
