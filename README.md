@@ -24,3 +24,6 @@ Dokończenie tworzenia gry(warunek wygranej lub remisu, liczenie punktów).
 Stworzenie armii 50 ludzików maszerujących obok siebie składających sie z sześcianów.
 ### Projekt:
 #### Temat: Sokoban 3D
+[link]https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Projekt
+15.04.2019 Start Projektu
+
