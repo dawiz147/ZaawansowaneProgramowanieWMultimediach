@@ -3,6 +3,7 @@
 #include "Res.h"
 #include <gl\GL.h> // OpenGL32
 #include <gl\GLU.h> // GLu32
+#define GL_GLEXT_PROTOTYPES
 
 //#include <cmath>
 //#include <gl\glaux.h> //Header File For The Glaux
@@ -19,20 +20,21 @@ float PlayerPositionY;
 float LevelOne[12][12] =
 {
   {1,1,1,1,1,1,1,1,1,1,1,1},
+  {1,0,0,0,1,0,0,0,0,0,0,1},
+  {1,0,0,0,1,0,0,0,0,0,0,1},
+  {1,0,0,0,1,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,1,0,0,0,0,0,1},
+  {1,0,0,0,0,1,0,0,0,0,0,1},
+  {1,0,0,0,0,1,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,1,0,1},
   {1,0.5,0,0,0,0,0,0,0,0,1,1},
   {1,1,1,1,1,1,1,1,1,1,1,1},
 
 
 };
+
 
 
 void DrawCube(float x, float y,float z,float dx,float dy, float dz)
@@ -42,40 +44,36 @@ void DrawCube(float x, float y,float z,float dx,float dy, float dz)
   glTranslatef(x, y, z); // zmiana po³o¿enia "œwiata"
   glScalef(dx, dy, dz); // przeskalowanie "œwiata"
   glBegin(GL_QUADS);
- 
+  if(dz==1)glColor3f(1, 0, 0);
+  else if(dz==0.5f)glColor3f(1, 0, 1);
+  else if(dz==0)glColor3f(1, 1, 1);
    
-    
-    glColor3f(1, 0, 0);
     glVertex3f(0, 0, 0);
     glVertex3f(0, 1, 0);
     glVertex3f(1, 1, 0);
     glVertex3f(1, 0, 0);
 
-    glColor3f(1, 1, 0);
     glVertex3f(0, 0, 1);
     glVertex3f(0, 1, 1);
     glVertex3f(1, 1, 1);
     glVertex3f(1, 0, 1);
 
-    glColor3f(1, 0, 1);
     glVertex3f(0, 1, 1);
     glVertex3f(0, 1, 0);
     glVertex3f(1, 1, 0);
     glVertex3f(1, 1, 1);
 
-    glColor3f(1, 0, 1);
     glVertex3f(1, 1, 1);
     glVertex3f(1, 1, 0);
     glVertex3f(1, 0, 0);
     glVertex3f(1, 0, 1);
 
-    glColor3f(0, 0, 1);
+
     glVertex3f(0, 0, 0);
     glVertex3f(1, 0, 0);
     glVertex3f(1, 0, 1);
     glVertex3f(0, 0, 1);
 
-    glColor3f(0, 1, 1);
     glVertex3f(0, 0, 0);
     glVertex3f(0, 1, 0);
     glVertex3f(0, 1, 1);
