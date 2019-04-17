@@ -123,10 +123,10 @@ int DrawGLScene(GLvoid)
 {
   glMatrixMode(GL_MODELVIEW);
   glEnable(GL_DEPTH_TEST);
-  Obrot+=0.01f;
+  Obrot+=0.05f;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
-  glTranslatef(0, 0, -10);
+  glTranslatef(6, 0, -15);
   
     glRotatef(Obrot, 0, 1, 0);
   
