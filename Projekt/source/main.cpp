@@ -20,7 +20,7 @@ float PlayerPositionY;
 float LevelOne[12][12] =
 {
   {1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,1,0,0,0,0,0,0,1},
+  {1,0.5,0,0,1,0,0,0,0,0,0,1},
   {1,0,0,0,1,0,0,0,0,0,0,1},
   {1,0,0,0,1,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,1},
@@ -29,11 +29,12 @@ float LevelOne[12][12] =
   {1,0,0,0,0,1,0,0,0,0,0,1},
   {1,0,0,0,0,1,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,1,0,1},
-  {1,0.5,0,0,0,0,0,0,0,0,1,1},
+  {1,0,0,0,0,0,0,0,0,0,1,1},
   {1,1,1,1,1,1,1,1,1,1,1,1},
 
 
 };
+float przpisywanie[12][12];
 
 
 
@@ -140,27 +141,27 @@ int DrawGLScene(GLvoid)
 
   CreateLevel();
   glEnd();
-  if(LevelOne[(int)(PlayerPositionX-1)][(int)abs((PlayerPositionY))]==0)
+  if(LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX-1)]==0)
   {
     if (bKey[1]) {
       PlayerPositionX --;
   
     }
   }
-  if (LevelOne[(int)(PlayerPositionX+1) ][(int)abs((PlayerPositionY))] == 0)
+  if (LevelOne[(int)(PlayerPositionY ) ][(int)(PlayerPositionX+1)] == 0)
   {
     if (bKey[0]) {
       PlayerPositionX ++;
 
     }
  }
-  if (LevelOne[(int)(PlayerPositionX )][(int)(PlayerPositionY+1)] == 0)
+  if (LevelOne[(int)(PlayerPositionY+1)][(int)(PlayerPositionX)] == 0)
  {
    if (bKey[2]) {
      PlayerPositionY ++;
  
    }
- } if (LevelOne[(int)(PlayerPositionX)][(int)PlayerPositionY-1 ] == 0)
+ } if (LevelOne[(int)(PlayerPositionY-1)][(int)PlayerPositionX ] == 0)
  {
    if (bKey[3]) {
      PlayerPositionY --;
