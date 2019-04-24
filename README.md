@@ -22,6 +22,9 @@ Napisanie aplikacji lupki. Po kliknięciu na bitmapę ma powiekszyć fragment ob
 Dokończenie tworzenia gry(warunek wygranej lub remisu, liczenie punktów).
 * ZadDom5: (zrobione)[link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/ZadDom/ZadDom5)
 Stworzenie armii 50 ludzików maszerujących obok siebie składających sie z sześcianów.
+<p align="center">
+<img src="https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/blob/master/SS/Army.gif" width="190" height="190" />
+  </p>
 ### Projekt:
 #### Temat: Sokoban 3D 15.04.2019 Start Projektu
 [link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Projekt)
