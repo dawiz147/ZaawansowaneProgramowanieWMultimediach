@@ -3,18 +3,19 @@
 #include "Res.h"
 #include <gl\GL.h> // OpenGL32
 #include <gl\GLU.h> // GLu32
+#include <vector>
 #define GL_GLEXT_PROTOTYPES
-
-//#include <cmath>
-//#include <gl\glaux.h> //Header File For The Glaux
 
 //biblioteki
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
-//#pragma comment(lib, "glaux.lib")
+
+HINSTANCE hInst;
 HWND hwndMainWindow;
-bool bKey[6] = { false };
 HDC hDC;
+
+bool Menu = true;
+bool bKey[6] = { false };
 float PlayerPositionX;
 float PlayerPositionY;
 float LevelOne[12][12] =
@@ -34,7 +35,8 @@ float LevelOne[12][12] =
 
 
 };
-float przpisywanie[12][12];
+
+
 
 
 
@@ -129,51 +131,51 @@ int DrawGLScene(GLvoid)
   glEnable(GL_DEPTH_TEST);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
-  //glPushMatrix();
-  
+  glTranslatef(-3, -3, -7.0f);
 
-  //glRotatef(180, 0, 1, 0);
-  glTranslatef(-3, -3, -7.0f); // zmiana po³o¿enia "œwiata"
-//glPopMatrix();
   
  
   
-
-  CreateLevel();
-  glEnd();
-  if(LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX-1)]==0)
+  if(Menu==true)
   {
-    if (bKey[1]) {
-      PlayerPositionX --;
-  
-    }
+    
   }
-  if (LevelOne[(int)(PlayerPositionY ) ][(int)(PlayerPositionX+1)] == 0)
-  {
-    if (bKey[0]) {
-      PlayerPositionX ++;
+  else {
+    CreateLevel();
+    glEnd();
+    if (LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX - 1)] == 0)
+    {
+      if (bKey[1]) {
+        PlayerPositionX--;
 
+      }
     }
- }
-  if (LevelOne[(int)(PlayerPositionY+1)][(int)(PlayerPositionX)] == 0)
- {
-   if (bKey[2]) {
-     PlayerPositionY ++;
- 
-   }
- } if (LevelOne[(int)(PlayerPositionY-1)][(int)PlayerPositionX ] == 0)
- {
-   if (bKey[3]) {
-     PlayerPositionY --;
+    if (LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX + 1)] == 0)
+    {
+      if (bKey[0]) {
+        PlayerPositionX++;
 
-   }
- }
-  CString sMessage2 = TEXT("");
-  sMessage2.Format(TEXT("X: %d, y: %d"),(int) PlayerPositionX,(int) PlayerPositionY);
-  SetWindowText(hwndMainWindow, _T(sMessage2));
-  DrawCube(PlayerPositionX*0.5f, PlayerPositionY*0.5f, -1, 0.5f, 0.5f, 0.5f);
-  return 1;
+      }
+    }
+    if (LevelOne[(int)(PlayerPositionY + 1)][(int)(PlayerPositionX)] == 0)
+    {
+      if (bKey[2]) {
+        PlayerPositionY++;
 
+      }
+    } if (LevelOne[(int)(PlayerPositionY - 1)][(int)PlayerPositionX] == 0)
+    {
+      if (bKey[3]) {
+        PlayerPositionY--;
+
+      }
+    }
+    CString sMessage2 = TEXT("");
+    sMessage2.Format(TEXT("X: %d, y: %d"), (int)PlayerPositionX, (int)PlayerPositionY);
+    SetWindowText(hwndMainWindow, _T(sMessage2));
+    DrawCube(PlayerPositionX*0.5f, PlayerPositionY*0.5f, -1, 0.5f, 0.5f, 0.5f);
+    return 1;
+  }
 
 }
 
@@ -185,9 +187,9 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
     return TRUE;
   case WM_PAINT:
   {
-
-    return FALSE;
+    return false;
   }
+  
   case WM_KEYDOWN:
   {
     if(wParam==VK_RIGHT)
@@ -233,7 +235,7 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
     }
     return TRUE;
   }
-
+ 
   case WM_SIZE:
   {
     ReSizeGLScene(LOWORD(IParam), HIWORD(IParam));
@@ -276,6 +278,7 @@ return FALSE;
 }
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
+  
   hwndMainWindow = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_MAINVIEW), NULL, DialogProc);
   static PIXELFORMATDESCRIPTOR pfd =//struktura formatu pixeli
   {
