@@ -4,7 +4,7 @@
 #include <gl\GL.h> // OpenGL32
 #include <gl\GLU.h> // GLu32
 #include <vector>
-#define GL_GLEXT_PROTOTYPES
+//#define GL_GLEXT_PROTOTYPES
 
 //biblioteki
 #pragma comment(lib, "opengl32.lib")
@@ -132,15 +132,6 @@ int DrawGLScene(GLvoid)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   glTranslatef(-3, -3, -7.0f);
-
-  
- 
-  
-  if(Menu==true)
-  {
-    
-  }
-  else {
     CreateLevel();
     glEnd();
     if (LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX - 1)] == 0)
@@ -177,7 +168,7 @@ int DrawGLScene(GLvoid)
     return 1;
   }
 
-}
+
 
 INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IParam)
 {
@@ -187,7 +178,7 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
     return TRUE;
   case WM_PAINT:
   {
-    return false;
+    return FALSE;
   }
   
   case WM_KEYDOWN:
