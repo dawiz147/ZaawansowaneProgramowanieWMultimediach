@@ -26,7 +26,7 @@ Stworzenie armii 50 ludzików maszerujących obok siebie składających sie z sz
 <img src="https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/blob/master/SS/Army.gif" width="190" height="190" />
   </p>
 ### Projekt:
-#### Temat: Sokoban 3D 15.04.2019 Start Projektu
+#### Temat: Sokoban 3D 
 [link](https://github.com/dawiz147/ZaawansowaneProgramowanieWMultimediach/tree/master/Projekt)
 
 
