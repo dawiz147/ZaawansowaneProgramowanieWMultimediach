@@ -4,20 +4,93 @@
 #include <gl\GL.h> // OpenGL32
 #include <gl\GLU.h> // GLu32
 #include <vector>
-//#define GL_GLEXT_PROTOTYPES
 
-//biblioteki
+#include <process.h>
+
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
+#pragma comment(lib, "winmm.lib")
 
-HINSTANCE hInst;
 HWND hwndMainWindow;
+HINSTANCE hInst;
 HDC hDC;
+
+DWORD WINAPI Music(LPVOID)
+{
+
+    WAVEFORMATEX pcmWaveFormat; 
+    pcmWaveFormat.wFormatTag = WAVE_FORMAT_PCM;
+    pcmWaveFormat.nChannels = 1;
+    pcmWaveFormat.nSamplesPerSec = 44100L;
+    pcmWaveFormat.wBitsPerSample = 8;
+    pcmWaveFormat.nAvgBytesPerSec = 44100L;
+    pcmWaveFormat.nBlockAlign = 1;
+    pcmWaveFormat.cbSize = 0;
+    MMRESULT mmResult;
+    HWAVEOUT hwo = 0; 
+    UINT devId;
+    for (devId = 0; devId < waveOutGetNumDevs(); devId++)
+    {
+      mmResult = waveOutOpen(&hwo, devId, &pcmWaveFormat, 0, 0, CALLBACK_NULL);
+      if (mmResult == MMSYSERR_NOERROR)break;
+    }
+    if (mmResult != MMSYSERR_NOERROR)
+    {
+      MessageBox(hwndMainWindow, TEXT("Nie znaleziono karty dziekowaej o wymaganych parametrach"), TEXT("ERROR"), MB_OK);
+      return mmResult;
+    }
+    WAVEHDR whdr;
+    ZeroMemory(&whdr, sizeof(WAVEHDR));
+    whdr.lpData = new char[pcmWaveFormat.nAvgBytesPerSec * 5];
+    whdr.dwBufferLength = pcmWaveFormat.nAvgBytesPerSec * 5;
+    whdr.dwUser = 0;
+    whdr.dwFlags = 0;
+    whdr.dwLoops = 0;
+    whdr.dwBytesRecorded = 0;
+    whdr.lpNext = 0;
+    whdr.reserved = 0;
+  
+    for (int i = 0; i < whdr.dwBufferLength; i++) {
+      if (i < whdr.dwBufferLength / 2) {
+        whdr.lpData[i] = (127 * sin(i*1200.0*3.141592 / (double)pcmWaveFormat.nSamplesPerSec) + 128);
+      }
+      else whdr.lpData[i] = (127 * sin(i * 20000 * 3.141592 / (double)pcmWaveFormat.nSamplesPerSec) + 128);
+
+    }
+    waveOutSetVolume(hwo, 0xFFFFFFFF);
+    mmResult = waveOutPrepareHeader(hwo, &whdr, sizeof(WAVEHDR));
+    if (mmResult != MMSYSERR_NOERROR) {
+      MessageBox(hwndMainWindow, TEXT("nie mozna zainicjowac karty"), TEXT("ERROR"), MB_OK);
+      return mmResult;
+    }
+    mmResult = waveOutWrite(hwo, &whdr, sizeof(WAVEHDR));
+    if (mmResult != MMSYSERR_NOERROR)
+    {
+      MessageBox(hwndMainWindow, TEXT("nie mozna zaladowac probek"), TEXT("ERROR"), MB_OK);
+      return mmResult;
+    }
+    while (true) {
+    while ((whdr.dwFlags & WHDR_DONE) != WHDR_DONE) Sleep(100);
+
+    mmResult = waveOutUnprepareHeader(hwo, &whdr, sizeof(WAVEHDR));
+    mmResult = waveOutClose(hwo);
+    delete[] whdr.lpData;
+  }
+  return 0;
+}
+
+
+
+
 
 bool Menu = true;
 bool bKey[6] = { false };
 float PlayerPositionX;
 float PlayerPositionY;
+float BoxPositionX;
+float BoxPositionY;
+float PlacePositionX;
+float PlacePositionY;
 float LevelOne[12][12] =
 {
   {1,1,1,1,1,1,1,1,1,1,1,1},
@@ -29,7 +102,7 @@ float LevelOne[12][12] =
   {1,0,0,0,0,1,0,0,0,0,0,1},
   {1,0,0,0,0,1,0,0,0,0,0,1},
   {1,0,0,0,0,1,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,1,0,1},
+  {1,0,0.75,0,0,0,0,0,0,1,-0.1,1},
   {1,0,0,0,0,0,0,0,0,0,1,1},
   {1,1,1,1,1,1,1,1,1,1,1,1},
 
@@ -50,6 +123,8 @@ void DrawCube(float x, float y,float z,float dx,float dy, float dz)
   if(dz==1)glColor3f(1, 0, 0);
   else if(dz==0.5f)glColor3f(1, 0, 1);
   else if(dz==0)glColor3f(1, 1, 1);
+  else if (dz == 0.75f)glColor3f(0, 1, 0);
+  else if (dz == -0.1f)glColor3f(1, 1, 0);
    
     glVertex3f(0, 0, 0);
     glVertex3f(0, 1, 0);
@@ -83,16 +158,17 @@ void DrawCube(float x, float y,float z,float dx,float dy, float dz)
     glVertex3f(0, 0, 1);
  
   glEnd();
-  glPopMatrix(); // wczytanie podstawowych ustawieñ 
+  glPopMatrix(); 
 
 }
-void CreateLevel() // funkcja rysujaca HeighMape
+void CreateLevel() 
 {
+  
     for (int i = 0; i < 12; i++)
     {
       for (int j = 0; j < 12; j++)
       {
-        if (LevelOne[i][j] == 1 || LevelOne[i][j] == 0) {
+        if (LevelOne[i][j] == 1 || LevelOne[i][j] == 0 ) {
           glPushMatrix();
           glTranslatef(0, 0, 0);
           DrawCube(j*0.5f, i*0.5f, -1, 0.5f, 0.5f, LevelOne[i][j]);
@@ -104,7 +180,18 @@ void CreateLevel() // funkcja rysujaca HeighMape
           PlayerPositionX = j;
           LevelOne[i][j] = 0;
         }
-       
+        else if (LevelOne[i][j] == 0.75f)
+        {
+          BoxPositionY = i;
+          BoxPositionX = j;
+          LevelOne[i][j] = 0;
+        }
+        else if (LevelOne[i][j] == -0.1f)
+        {
+          PlacePositionY = i;
+          PlacePositionX = j;
+         // LevelOne[i][j] = 0;
+        }
     }
   }
 }
@@ -127,6 +214,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)
 
 int DrawGLScene(GLvoid)
 {
+  
   glMatrixMode(GL_MODELVIEW);
   glEnable(GL_DEPTH_TEST);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -134,37 +222,70 @@ int DrawGLScene(GLvoid)
   glTranslatef(-3, -3, -7.0f);
     CreateLevel();
     glEnd();
-    if (LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX - 1)] == 0)
+  if (BoxPositionY==PlacePositionY && BoxPositionX==PlacePositionX)
+  {
+    CString sMessage2 = TEXT("");
+    sMessage2.Format(TEXT("X: %d, y: %d YOU WIN"), (int)PlayerPositionX, (int)PlayerPositionY);
+    SetWindowText(hwndMainWindow, _T(sMessage2));
+  }
+    if ((LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX - 1)] <= 0) ||((PlayerPositionX-1 ==BoxPositionX) && (PlayerPositionY==BoxPositionY) && LevelOne[(int)(BoxPositionY)][(int)(BoxPositionX-1)]<=0))
     {
       if (bKey[1]) {
-        PlayerPositionX--;
-
+        if((PlayerPositionX - 1 == BoxPositionX) && (PlayerPositionY == BoxPositionY) && LevelOne[(int)(BoxPositionY)][(int)(BoxPositionX - 1)] <= 0)
+        {
+          PlayerPositionX--;
+          BoxPositionX--;
+        }
+        else if(LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX - 1)] <= 0 && ((PlayerPositionX - 1 != BoxPositionX) || (PlayerPositionY != BoxPositionY)))
+          PlayerPositionX--;
       }
     }
-    if (LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX + 1)] == 0)
+    //
+    if ((LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX + 1)] <= 0) || ((PlayerPositionX + 1 == BoxPositionX) && (PlayerPositionY == BoxPositionY) && LevelOne[(int)(BoxPositionY)][(int)(BoxPositionX + 1)] <= 0))
     {
       if (bKey[0]) {
-        PlayerPositionX++;
-
+        if ((PlayerPositionX + 1 == BoxPositionX) && (PlayerPositionY == BoxPositionY) && LevelOne[(int)(BoxPositionY)][(int)(BoxPositionX + 1)] <= 0)
+        {
+          PlayerPositionX++;
+          BoxPositionX++;
+        }
+        else if (LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX + 1)] <= 0 && ((PlayerPositionX + 1 != BoxPositionX) || (PlayerPositionY != BoxPositionY)))
+          PlayerPositionX++;
       }
     }
-    if (LevelOne[(int)(PlayerPositionY + 1)][(int)(PlayerPositionX)] == 0)
+
+    if ((LevelOne[(int)(PlayerPositionY+1)][(int)(PlayerPositionX )] <= 0) || ((PlayerPositionY + 1 == BoxPositionY) && (PlayerPositionX == BoxPositionX) && LevelOne[(int)(BoxPositionY+1)][(int)(BoxPositionX)] <= 0))
     {
       if (bKey[2]) {
-        PlayerPositionY++;
-
-      }
-    } if (LevelOne[(int)(PlayerPositionY - 1)][(int)PlayerPositionX] == 0)
-    {
-      if (bKey[3]) {
-        PlayerPositionY--;
-
+        if ((PlayerPositionY + 1 == BoxPositionY) && (PlayerPositionX == BoxPositionX) && LevelOne[(int)(BoxPositionY+1)][(int)(BoxPositionX )] <= 0)
+        {
+          PlayerPositionY++;
+          BoxPositionY++;
+        }
+        else if (LevelOne[(int)(PlayerPositionY+1)][(int)(PlayerPositionX)] <= 0 && ((PlayerPositionY + 1 != BoxPositionY) || (PlayerPositionX != BoxPositionX)))
+          PlayerPositionY++;
       }
     }
-    CString sMessage2 = TEXT("");
-    sMessage2.Format(TEXT("X: %d, y: %d"), (int)PlayerPositionX, (int)PlayerPositionY);
-    SetWindowText(hwndMainWindow, _T(sMessage2));
+ 
+    if((LevelOne[(int)(PlayerPositionY - 1)][(int)(PlayerPositionX)] <= 0) || ((PlayerPositionY - 1 == BoxPositionY) && (PlayerPositionX == BoxPositionX) && LevelOne[(int)(BoxPositionY - 1)][(int)(BoxPositionX)] <= 0))
+    {
+      if (bKey[3]) {
+        if ((PlayerPositionY - 1 == BoxPositionY) && (PlayerPositionX == BoxPositionX) && LevelOne[(int)(BoxPositionY +-1)][(int)(BoxPositionX)] <= 0)
+        {
+          PlayerPositionY--;
+          BoxPositionY--;
+        }
+        else if (LevelOne[(int)(PlayerPositionY - 1)][(int)(PlayerPositionX)] <= 0 && ((PlayerPositionY - 1 != BoxPositionY) || (PlayerPositionX != BoxPositionX)))
+          PlayerPositionY--;
+      }
+    }
+ 
+   // CString sMessage2 = TEXT("");
+   // sMessage2.Format(TEXT("X: %d, y: %d, xb:%d, yb:%d"), (int)PlayerPositionX, (int)PlayerPositionY,(int)BoxPositionX, (int)BoxPositionY);
+   // SetWindowText(hwndMainWindow, _T(sMessage2));
     DrawCube(PlayerPositionX*0.5f, PlayerPositionY*0.5f, -1, 0.5f, 0.5f, 0.5f);
+    DrawCube(BoxPositionX*0.5f, BoxPositionY*0.5f, -1, 0.5f, 0.5f, 0.75f);
+    DrawCube(PlacePositionX*0.5f, PlacePositionY*0.5f, -1, 0.5f, 0.5f, -0.1f);
     return 1;
   }
 
@@ -175,6 +296,7 @@ INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IPara
   switch (uMsg)
   {
   case WM_CREATE:
+    CreateThread(0, 0, Music, 0, 0, NULL);
     return TRUE;
   case WM_PAINT:
   {
@@ -269,7 +391,6 @@ return FALSE;
 }
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
-  
   hwndMainWindow = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_MAINVIEW), NULL, DialogProc);
   static PIXELFORMATDESCRIPTOR pfd =//struktura formatu pixeli
   {
