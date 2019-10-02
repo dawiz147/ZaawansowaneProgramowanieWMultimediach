@@ -1,6 +1,7 @@
 #include <Windows.h>
-#include <atlstr.h>
+//#include <atlstr.h>
 #include "Res.h"
+#include <cmath>
 #pragma comment(lib, "winmm.lib")
 INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IParam)
 {

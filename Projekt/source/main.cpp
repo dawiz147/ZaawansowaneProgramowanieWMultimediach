@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <process.h>
+#include <string>
 
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
@@ -14,74 +15,6 @@
 HWND hwndMainWindow;
 HINSTANCE hInst;
 HDC hDC;
-
-DWORD WINAPI Music(LPVOID)
-{
-
-    WAVEFORMATEX pcmWaveFormat; 
-    pcmWaveFormat.wFormatTag = WAVE_FORMAT_PCM;
-    pcmWaveFormat.nChannels = 1;
-    pcmWaveFormat.nSamplesPerSec = 44100L;
-    pcmWaveFormat.wBitsPerSample = 8;
-    pcmWaveFormat.nAvgBytesPerSec = 44100L;
-    pcmWaveFormat.nBlockAlign = 1;
-    pcmWaveFormat.cbSize = 0;
-    MMRESULT mmResult;
-    HWAVEOUT hwo = 0; 
-    UINT devId;
-    for (devId = 0; devId < waveOutGetNumDevs(); devId++)
-    {
-      mmResult = waveOutOpen(&hwo, devId, &pcmWaveFormat, 0, 0, CALLBACK_NULL);
-      if (mmResult == MMSYSERR_NOERROR)break;
-    }
-    if (mmResult != MMSYSERR_NOERROR)
-    {
-      MessageBox(hwndMainWindow, TEXT("Nie znaleziono karty dziekowaej o wymaganych parametrach"), TEXT("ERROR"), MB_OK);
-      return mmResult;
-    }
-    WAVEHDR whdr;
-    ZeroMemory(&whdr, sizeof(WAVEHDR));
-    whdr.lpData = new char[pcmWaveFormat.nAvgBytesPerSec * 5];
-    whdr.dwBufferLength = pcmWaveFormat.nAvgBytesPerSec * 5;
-    whdr.dwUser = 0;
-    whdr.dwFlags = 0;
-    whdr.dwLoops = 0;
-    whdr.dwBytesRecorded = 0;
-    whdr.lpNext = 0;
-    whdr.reserved = 0;
-  
-    for (int i = 0; i < whdr.dwBufferLength; i++) {
-      if (i < whdr.dwBufferLength / 2) {
-        whdr.lpData[i] = (127 * sin(i*1200.0*3.141592 / (double)pcmWaveFormat.nSamplesPerSec) + 128);
-      }
-      else whdr.lpData[i] = (127 * sin(i * 20000 * 3.141592 / (double)pcmWaveFormat.nSamplesPerSec) + 128);
-
-    }
-    waveOutSetVolume(hwo, 0xFFFFFFFF);
-    mmResult = waveOutPrepareHeader(hwo, &whdr, sizeof(WAVEHDR));
-    if (mmResult != MMSYSERR_NOERROR) {
-      MessageBox(hwndMainWindow, TEXT("nie mozna zainicjowac karty"), TEXT("ERROR"), MB_OK);
-      return mmResult;
-    }
-    mmResult = waveOutWrite(hwo, &whdr, sizeof(WAVEHDR));
-    if (mmResult != MMSYSERR_NOERROR)
-    {
-      MessageBox(hwndMainWindow, TEXT("nie mozna zaladowac probek"), TEXT("ERROR"), MB_OK);
-      return mmResult;
-    }
-    while (true) {
-    while ((whdr.dwFlags & WHDR_DONE) != WHDR_DONE) Sleep(100);
-
-    mmResult = waveOutUnprepareHeader(hwo, &whdr, sizeof(WAVEHDR));
-    mmResult = waveOutClose(hwo);
-    delete[] whdr.lpData;
-  }
-  return 0;
-}
-
-
-
-
 
 bool Menu = true;
 bool bKey[6] = { false };
@@ -190,7 +123,6 @@ void CreateLevel()
         {
           PlacePositionY = i;
           PlacePositionX = j;
-         // LevelOne[i][j] = 0;
         }
     }
   }
@@ -240,7 +172,6 @@ int DrawGLScene(GLvoid)
           PlayerPositionX--;
       }
     }
-    //
     if ((LevelOne[(int)(PlayerPositionY)][(int)(PlayerPositionX + 1)] <= 0) || ((PlayerPositionX + 1 == BoxPositionX) && (PlayerPositionY == BoxPositionY) && LevelOne[(int)(BoxPositionY)][(int)(BoxPositionX + 1)] <= 0))
     {
       if (bKey[0]) {
@@ -253,7 +184,6 @@ int DrawGLScene(GLvoid)
           PlayerPositionX++;
       }
     }
-
     if ((LevelOne[(int)(PlayerPositionY+1)][(int)(PlayerPositionX )] <= 0) || ((PlayerPositionY + 1 == BoxPositionY) && (PlayerPositionX == BoxPositionX) && LevelOne[(int)(BoxPositionY+1)][(int)(BoxPositionX)] <= 0))
     {
       if (bKey[2]) {
@@ -279,10 +209,7 @@ int DrawGLScene(GLvoid)
           PlayerPositionY--;
       }
     }
- 
-   // CString sMessage2 = TEXT("");
-   // sMessage2.Format(TEXT("X: %d, y: %d, xb:%d, yb:%d"), (int)PlayerPositionX, (int)PlayerPositionY,(int)BoxPositionX, (int)BoxPositionY);
-   // SetWindowText(hwndMainWindow, _T(sMessage2));
+
     DrawCube(PlayerPositionX*0.5f, PlayerPositionY*0.5f, -1, 0.5f, 0.5f, 0.5f);
     DrawCube(BoxPositionX*0.5f, BoxPositionY*0.5f, -1, 0.5f, 0.5f, 0.75f);
     DrawCube(PlacePositionX*0.5f, PlacePositionY*0.5f, -1, 0.5f, 0.5f, -0.1f);
@@ -293,10 +220,9 @@ int DrawGLScene(GLvoid)
 
 INT_PTR CALLBACK DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM IParam)
 {
-  switch (uMsg)
+   switch (uMsg)
   {
   case WM_CREATE:
-    CreateThread(0, 0, Music, 0, 0, NULL);
     return TRUE;
   case WM_PAINT:
   {
@@ -411,10 +337,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     0,                            //zarezerwowane
     0, 0, 0                       // ignorowane warstwy maski
   };
- // HDC hDC = NULL;
   HGLRC hRC = NULL;
   GLuint PixelFormat;
-
+  std::string a1 = "sound.wav";
+  PlaySound((a1.c_str()), NULL, SND_ASYNC | SND_FILENAME);
   if (!(hDC = GetDC(hwndMainWindow))) return 0; //pobieranie kontekstu
   if (!(PixelFormat = ChoosePixelFormat(hDC, &pfd))) return 0; //wyszukiwanie formatu pixeli
 
